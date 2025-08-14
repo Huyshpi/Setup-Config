@@ -1,0 +1,202 @@
+-- ================================================================================================
+-- AUTO BUY & EQUIP SCRIPT - MAIN CODE
+-- GitHub: https://github.com/Huyshpi/HuysHappi.main
+-- File: Cat-Happi.lua
+-- ================================================================================================
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Check if config exists
+if not getgenv().AutoBuyMelee then
+    print("❌ Config not found! Please use the complete script with config.")
+    return
+end
+
+-- ================================================================================================
+-- DATA TABLES
+-- ================================================================================================
+
+-- Melee List Data
+local MeleeList = {
+    [1] = "BuySanguineArt",
+    [2] = "BuyGodhuman", 
+    [3] = "BuyDragonTalon",
+    [4] = "BuySharkmanKarate",
+    [5] = "BuyDeathStep", 
+    [6] = "BuyElectricClaw",
+    [7] = "BuySuperhuman",
+}
+
+local MeleeNames = {
+    [1] = "Sanguine Art",
+    [2] = "Godhuman",
+    [3] = "Dragon Talon", 
+    [4] = "Sharkman Karate",
+    [5] = "Death Step",
+    [6] = "Electric Claw", 
+    [7] = "Superhuman",
+}
+
+-- Weapon List Data
+local WeaponList = {
+    [1] = "Saber",
+    [2] = "Cursed Dual Katana", 
+    [3] = "Yama",
+    [4] = "Tushita",
+    [5] = "Skull Guitar",
+    [6] = "Dark Blade",
+    [7] = "True Triple Katana",
+    [8] = "Buddy Sword",
+    [9] = "Canvander", 
+    [10] = "Twin Hooks",
+    [11] = "Fox Lamp",
+    [12] = "String",
+    [13] = "Slayer Sword",
+}
+
+-- ================================================================================================
+-- FUNCTIONS
+-- ================================================================================================
+
+-- Function Buy Melee
+function BuyMelee()
+    if not getgenv().AutoBuyMelee then return end
+    
+    local MeleeName = MeleeList[getgenv().MeleeNumber]
+    local DisplayName = MeleeNames[getgenv().MeleeNumber]
+    
+    if MeleeName and DisplayName then
+        pcall(function()
+            ReplicatedStorage.Remotes.CommF_:InvokeServer(MeleeName)
+            print("🥊 [MELEE] Buying: " .. DisplayName)
+        end)
+    else
+        print("❌ [MELEE] Invalid MeleeNumber: " .. tostring(getgenv().MeleeNumber) .. " (Valid: 1-7)")
+    end
+end
+
+-- Function Equip Weapon
+function EquipWeapon()
+    if not getgenv().AutoEquipWeapon then return end
+    
+    local WeaponName = WeaponList[getgenv().WeaponNumber]
+    
+    if WeaponName then
+        pcall(function()
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("LoadItem", WeaponName)
+            print("⚔️ [WEAPON] Equipped: " .. WeaponName)
+        end)
+    else
+        print("❌ [WEAPON] Invalid WeaponNumber: " .. tostring(getgenv().WeaponNumber) .. " (Valid: 1-10)")
+    end
+end
+
+-- Function Buy All Haki
+function BuyAllHaki()
+    if not getgenv().AutoBuyHaki then return end
+    
+    pcall(function()
+        ReplicatedStorage.Remotes.CommF_:InvokeServer("BuyHaki","Geppo")
+        ReplicatedStorage.Remotes.CommF_:InvokeServer("BuyHaki","Buso") 
+        ReplicatedStorage.Remotes.CommF_:InvokeServer("BuyHaki","Soru")
+        ReplicatedStorage.Remotes.CommF_:InvokeServer("KenTalk","Buy")
+        print("🔥 [HAKI] Buying all haki abilities...")
+    end)
+end
+
+-- Display Info
+function DisplayInfo()
+    print("=" .. string.rep("=", 65))
+    print("🚀 AUTO BUY & EQUIP SCRIPT LOADED")
+    print("=" .. string.rep("=", 65))
+    
+    -- Current Settings
+    print("⚙️  CURRENT CONFIG:")
+    print("   • Auto Buy Melee: " .. tostring(getgenv().AutoBuyMelee))
+    if getgenv().AutoBuyMelee then
+        local selectedMelee = MeleeNames[getgenv().MeleeNumber] or "❌ Invalid"
+        print("     → Selected: [" .. getgenv().MeleeNumber .. "] " .. selectedMelee)
+    end
+    
+    print("   • Auto Equip Weapon: " .. tostring(getgenv().AutoEquipWeapon))
+    if getgenv().AutoEquipWeapon then
+        local selectedWeapon = WeaponList[getgenv().WeaponNumber] or "❌ Invalid"
+        print("     → Selected: [" .. getgenv().WeaponNumber .. "] " .. selectedWeapon)
+    end
+    
+    print("   • Auto Buy Haki: " .. tostring(getgenv().AutoBuyHaki))
+    print("   • Check Interval: " .. getgenv().CheckInterval .. " seconds")
+    
+    -- Lists
+    print("\n🥊 MELEE LIST:")
+    for i, name in pairs(MeleeNames) do
+        local indicator = (i == getgenv().MeleeNumber and getgenv().AutoBuyMelee) and " ◄ SELECTED" or ""
+        print("   [" .. i .. "] " .. name .. indicator)
+    end
+    
+    print("\n⚔️ WEAPON LIST:")
+    for i, name in pairs(WeaponList) do
+        local indicator = (i == getgenv().WeaponNumber and getgenv().AutoEquipWeapon) and " ◄ SELECTED" or ""
+        print("   [" .. i .. "] " .. name .. indicator)
+    end
+    
+    print("=" .. string.rep("=", 65))
+end
+
+-- ================================================================================================
+-- MAIN EXECUTION
+-- ================================================================================================
+
+-- Validate config
+local function ValidateConfig()
+    local errors = {}
+    
+    if getgenv().MeleeNumber < 1 or getgenv().MeleeNumber > #MeleeNames then
+        table.insert(errors, "MeleeNumber must be 1-" .. #MeleeNames)
+    end
+    
+    if getgenv().WeaponNumber < 1 or getgenv().WeaponNumber > #WeaponList then
+        table.insert(errors, "WeaponNumber must be 1-" .. #WeaponList)
+    end
+    
+    if getgenv().CheckInterval < 1 then
+        table.insert(errors, "CheckInterval must be at least 1 second")
+    end
+    
+    if #errors > 0 then
+        print("❌ CONFIG ERRORS:")
+        for _, error in pairs(errors) do
+            print("   • " .. error)
+        end
+        print("Please fix the config and try again.")
+        return false
+    end
+    
+    return true
+end
+
+-- Initialize
+if not ValidateConfig() then
+    return
+end
+
+DisplayInfo()
+
+-- Execute immediately
+BuyMelee()
+EquipWeapon()
+BuyAllHaki()
+
+-- Main loop
+spawn(function()
+    while true do
+        wait(getgenv().CheckInterval)
+        BuyMelee()
+        EquipWeapon() 
+        BuyAllHaki()
+    end
+end)
+
+print("✅ Script is running successfully!")
+print("🔄 Will check every " .. getgenv().CheckInterval .. " seconds")
+print("📝 To change settings, edit the config values and re-run the script")
