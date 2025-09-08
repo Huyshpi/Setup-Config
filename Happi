@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+
+# ===== CLEAR SCREEN =====
+def clear_screen():
+    # Xóa màn hình terminal (Android/Linux: clear, Windows: cls)
+    os.system("cls" if os.name == "nt" else "clear")
+
+# ===== ĐƯỜNG DẪN =====
+JSON_PATHS = [
+    "/storage/emulated/0/Codex/Workspace/True W-azure V2_Beta/ConfigMain",
+    "/storage/emulated/0/Arceus X/Workspace/True W-azure V2_Beta/ConfigMain",
+    "/storage/emulated/0/RonixExploit/Workspace/True W-azure V2_Beta/ConfigMain",
+    "/storage/emulated/0/Delta/Workspace/True W-azure V2_Beta/ConfigMain"
+]
+
+TXT_PATHS = [
+    "/storage/emulated/0/Codex/Workspace/True W-azure V2_Beta/Main",
+    "/storage/emulated/0/Arceus X/Workspace/True W-azure V2_Beta/Main",
+    "/storage/emulated/0/RonixExploit/Workspace/True W-azure V2_Beta/Main",
+    "/storage/emulated/0/Delta/Workspace/True W-azure V2_Beta/Main"
+]
+
+AUTOEXEC_PATHS = [
+    "/storage/emulated/0/Codex/Autoexec",
+    "/storage/emulated/0/Arceus X/Autoexec",
+    "/storage/emulated/0/RonixExploit/autoexec",
+    "/storage/emulated/0/Delta/Autoexec"
+]
+
+# ===== HÀM PHỤ =====
+def ensure_cat_happi_folder():
+    download_path = "/storage/emulated/0/Download"
+    cat_happi_path = os.path.join(download_path, "Cat-Happi")
+    if not os.path.exists(cat_happi_path):
+        os.makedirs(cat_happi_path)
+
+    name_config_path = os.path.join(cat_happi_path, "NameConfig.txt")
+    if not os.path.exists(name_config_path):
+        with open(name_config_path, 'w', encoding='utf-8') as f:
+            f.write("")
+
+    config_script_path = os.path.join(cat_happi_path, "ConfigScript.json")
+    if not os.path.exists(config_script_path):
+        with open(config_script_path, 'w', encoding='utf-8') as f:
+            f.write("")
+
+def read_files():
+    download_path = "/storage/emulated/0/Download"
+    cat_happi_path = os.path.join(download_path, "Cat-Happi")
+
+    name_config_path = os.path.join(cat_happi_path, "NameConfig.txt")
+    if not os.path.exists(name_config_path):
+        return None, None
+    with open(name_config_path, 'r', encoding='utf-8') as f:
+        names = [line.strip() for line in f.readlines() if line.strip()]
+
+    config_script_path = os.path.join(cat_happi_path, "ConfigScript.json")
+    if not os.path.exists(config_script_path):
+        return None, None
+    with open(config_script_path, 'r', encoding='utf-8') as f:
+        config_content = f.read()
+
+    return names, config_content
+
+def create_json_files(names, config_content):
+    created_count = 0
+    for json_path in JSON_PATHS:
+        if not os.path.exists(json_path):
+            continue
+        for name in names:
+            try:
+                with open(os.path.join(json_path, f"{name}.json"), 'w', encoding='utf-8') as f:
+                    f.write(config_content)
+                created_count += 1
+            except:
+                pass
+    return created_count
+
+def create_txt_files(names):
+    created_count = 0
+    for txt_path in TXT_PATHS:
+        if not os.path.exists(txt_path):
+            continue
+        for name in names:
+            try:
+                with open(os.path.join(txt_path, f"{name}.txt"), 'w', encoding='utf-8') as f:
+                    f.write(f"True W-azure V2_Beta/ConfigMain/{name}.json")
+                created_count += 1
+            except:
+                pass
+    return created_count
+
+def delete_json_files():
+    deleted_count = 0
+    for json_path in JSON_PATHS:
+        if not os.path.exists(json_path):
+            continue
+        try:
+            for file in os.listdir(json_path):
+                if file.endswith(".json"):
+                    os.remove(os.path.join(json_path, file))
+                    deleted_count += 1
+        except:
+            pass
+    return deleted_count
+
+def create_autoexec_files(device_num):
+    created_count = 0
+    for autoexec_path in AUTOEXEC_PATHS:
+        if not os.path.exists(autoexec_path):
+            continue
+        try:
+            # w.txt
+            with open(os.path.join(autoexec_path, "w.txt"), 'w', encoding='utf-8') as f:
+                f.write("")
+            created_count += 1
+            # fps.txt
+            fps_content = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Huyshpi/Show-Fps/refs/heads/main/Nothing"))()'
+            with open(os.path.join(autoexec_path, "fps.txt"), 'w', encoding='utf-8') as f:
+                f.write(fps_content)
+            created_count += 1
+            # h.txt
+            h_content = f"""getgenv().Hermanos_Settings = {{
+    ['key'] = 'cd289c34-4831-4ca1-bdde-061af5412407',
+    ['PC'] = 'Device-{device_num}',
+    ['webhooks'] = {{
+        ['fullmoon'] = 'https://discord.com/api/webhooks/',
+        ['mirage'] = 'https://discord.com/api/webhooks/',
+    }},
+    ['Sword'] = {{'Cursed Dual Katana', 'Shark Anchor', 'Tushita', 'Yama', 'Dark Dagger', 'Hallow Scythe', 'Saber'}},
+    ['Gun'] = {{'Skull Guitar', 'Serpent Bow', 'Kabucha', 'Acidum Rifle'}},
+    ['Accessories'] = {{'Dark Coat', 'Leviathan Shield', 'Leviathan Crown', 'Pale Scarf', 'Kitsune Mask', 'Kitsune Ribbon'}},
+    ['Fruit'] = {{
+        'Kitsune', 'Leopard', 'Dragon (West)', 'Spirit', 'Control', 'Venom', 'Gas', 'Yeti',
+        'Shadow', 'Dough', 'Mammoth', 'T-Rex', 'Dragon (East)'
+    }}
+}}
+ 
+task.spawn(function() loadstring(game:HttpGet('https://raw.githubusercontent.com/hermanos-dev/hermanos-script/main/main.lua'))() end)"""
+            with open(os.path.join(autoexec_path, "h.txt"), 'w', encoding='utf-8') as f:
+                f.write(h_content)
+            created_count += 1
+        except:
+            pass
+    return created_count
+
+# ===== MENU =====
+def setup_script_menu():
+    while True:
+        print("\n[ Hermanos - Device | 1-10 ]")
+        device_choice = input("Enter Device Number (1-10): ").strip()
+        if device_choice.isdigit() and 1 <= int(device_choice) <= 10:
+            count = create_autoexec_files(int(device_choice))
+            clear_screen()
+            print(f"✅ Success! Created {count} script files for Device-{device_choice}")
+            return
+        else:
+            clear_screen()
+            print("❌ Invalid choice. Please enter a number between 1-10")
+
+def menu():
+    while True:
+        print("\n" + "="*40)
+        print("[ 1 ] Set Config")
+        print("[ 2 ] Delete Config")
+        print("[ 3 ] Setup Script")
+        print("[ 4 ] Exit")
+        print("="*40)
+        choice = input("Enter Number: ").strip()
+
+        if choice == "1":
+            names, config_content = read_files()
+            if not names or not config_content.strip():
+                clear_screen()
+                print("❌ Error: NameConfig.txt or ConfigScript.json is empty or missing")
+                continue
+            json_count = create_json_files(names, config_content)
+            txt_count = create_txt_files(names)
+            clear_screen()
+            print(f"✅ Success! Created {json_count} JSON files and {txt_count} TXT files")
+
+        elif choice == "2":
+            count = delete_json_files()
+            clear_screen()
+            print(f"✅ Success! Deleted {count} JSON files")
+
+        elif choice == "3":
+            setup_script_menu()
+
+        elif choice == "4":
+            print("👋 Goodbye!")
+            sys.exit()
+        else:
+            clear_screen()
+            print("❌ Invalid choice")
+
+def main():
+    ensure_cat_happi_folder()
+    clear_screen()
+    menu()
+
+if __name__ == "__main__":
+    main()
