@@ -131,9 +131,9 @@ def create_autoexec_files(device_num):
         ['fullmoon'] = 'https://discord.com/api/webhooks/',
         ['mirage'] = 'https://discord.com/api/webhooks/',
     }},
-    ['Sword'] = {{'Cursed Dual Katana', 'Shark Anchor', 'Tushita', 'Yama', 'Saber'}},
+    ['Sword'] = {{'Cursed Dual Katana', 'Tushita', 'Yama', 'Saber'}},
     ['Gun'] = {{'Skull Guitar'}},
-    ['Accessories'] = {{'Dark Coat', 'Leviathan Shield', 'Leviathan Crown', 'Pale Scarf', 'Kitsune Mask', 'Kitsune Ribbon'}},
+    ['Accessories'] = {{'Pale Scarf'}},
     ['Fruit'] = {{
         'Kitsune', 'Leopard', 'Dragon (West)', 'Spirit', 'Control', 'Venom', 'Gas', 'Yeti',
         'Shadow', 'Dough', 'Mammoth', 'T-Rex', 'Dragon (East)'
