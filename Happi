@@ -15,6 +15,7 @@ JSON_PATHS = [
     "/storage/emulated/0/Arceus X/Workspace/True W-azure V2_Beta/ConfigMain",
     "/storage/emulated/0/RonixExploit/workspace/True W-azure V2_Beta/ConfigMain",
     "/storage/emulated/0/Delta/Workspace/True W-azure V2_Beta/ConfigMain"
+    "C:\Users\admin\AppData\Local\Wave\workspace\True W-azure V2_Beta/ConfigMain"
 ]
 
 TXT_PATHS = [
@@ -22,6 +23,7 @@ TXT_PATHS = [
     "/storage/emulated/0/Arceus X/Workspace/True W-azure V2_Beta/Main",
     "/storage/emulated/0/RonixExploit/workspace/True W-azure V2_Beta/Main",
     "/storage/emulated/0/Delta/Workspace/True W-azure V2_Beta/Main"
+    "C:\Users\admin\AppData\Local\Wave\workspace\True W-azure V2_Beta/Main"
 ]
 
 AUTOEXEC_PATHS = [
